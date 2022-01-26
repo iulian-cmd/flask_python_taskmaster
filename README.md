@@ -1,4 +1,4 @@
-### Python task app with Flask
+### Python task app with Flask. A basic CRUD app.
 
 
 
