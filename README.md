@@ -1,29 +1,93 @@
 ### Python task app with Flask. A basic CRUD app.
 
+Install Python and pip. We use pip if we use packages for python2 and pip3 if we use packages for python3.
+
+Create a folder for the project. 
+
+Creating the virtual environment is done by executing the command `venv`:
+
+```python
+python3 -m venv /path/to/new/virtual/environment
+```
+
+Activate the environment:
+
+```python
+.\venv\Scripts\Activate.ps1
+```
+
+The terminal in the IDE should look like this:
+
+```python
+(venv) PS C:\Users\user\Documents\_python\FlaskIntroduction> 
+```
+
+Install the requirements in the environment:
+
+```python
+pip3 install flask flask-sqlalchemy
+```
+
+The install includes werkzeug which is the wsgi server `flask` is based on.
 
 
 
+In the project folder we create app.py
 
+Inside we import flask
 
+```python
+from flask import Flask
+```
 
+We setup our application:
 
+```python
+app = Flask(__name__)
+```
 
+Create an index route:
 
+```
+@app.route('/')
+```
 
+We create a function index which return a string for the moment. See if that works.
+
+```python
+def index():
+​	return "Hello World!"
+```
+
+This is a boilerplate code that protects users from accidentally invoking the script when they didn't intend to. It is called also a guard script. Or an idiom of python.
+
+```python
+if __name__ == "__main__":
+	app.run(debug=True)
+```
+
+We can test if the app is running at this point by typing:
+
+```python
+python3 app.py
+```
 
 Create folder name static
 
-Create folder name templates
-import render_template in app.py
-create index.html in template folder
-in the app.py in the routing we change "Hello World" with render_template('index.html')
+Create folder name templates. Import render_template in app.py. Create index.html in template folder.
 
-In the index.html we write something like Hello World 2. When server refresh we can see that Hello World 2 is displayed.
+In the app.py in the routing we change "Hello World" with:
+
+```python
+render_template('index.html')
+```
+
+In the index.html we write something like Hello World 2. When server refreshes we can see that Hello World 2 is displayed.
 
 We need to use template inheritance to avoid writing boiling plate template each time
 For that we create base.html in templates and start writing blocks with jinja2 template syntax (module for jinja2 must be installed). 
 
-```python
+```jinja2
 Delimiters in jinja2
 {%....%} are for statements
 {{....}} are expressions used to print to template output
@@ -33,9 +97,18 @@ Delimiters in jinja2
 
 After creating template in base with lines like {% block head %} {% endblock %} we delete boiler plate in index.html and we write
 {% extends 'base.html' %} and use the blocks from the base templates.
-{% comment %} inherits the template from base.html {% endcomment %}        {% extends 'base.html' %}
+		
 
-{% comment %} Starting of the head block {% endcomment %}     {% block head %}     etc.
+```jinja2
+{% comment %} inherits the template from base.html {% endcomment %}       
+
+ {% extends 'base.html' %}
+
+{% comment %} Starting of the head block {% endcomment %}    
+
+ {% block head %}     etc.
+```
+
 We put <title> in the head block
 
 In the static folder we create css folder  and file main.css. We link the main.css in the base.html like this 
@@ -60,13 +133,13 @@ app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///test.db'
 
 We initialize the database with 
 
-```python
+```sqlite
 db=SQLAlchemy(app)
 ```
 
 Next we create the model by writing a class
 
-```python
+```sqlite
 class ToDo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
@@ -85,7 +158,7 @@ def __ref__(self):
 
 Creating the database: we go in the terminal type python3, in python3 we type:
 
-```python
+```sqlite
 from app import db  
 db.create_all() 
 exit()
@@ -110,30 +183,31 @@ in the index.html we create a form like this:
 </form>
 ```
 
-
-
 We start creating conditions by importing request in app.py
-import request.
+
+```python
+from flask import request.
+```
 
 if the request that's set to the route is POST do smth:
 
 ```python
-    if request.method == 'POST':
+if request.method == 'POST':
     return "Hello"  // it returns Hello no matter what we input 
-    else:
+else:
     return render_template('index.html)
 ```
 
 We start create the logic in the return of the if statement:
 
 ```python
-task.content = request.form['content']
+task_content = request.form['content']
 ```
 
 We create a model for the task
 
 ```python
-new_task = ToDo(content=task.content)
+new_task = ToDo(content=task_content)
 ```
 
 Now we push the content of the task to the test database. Start by importing redirect.

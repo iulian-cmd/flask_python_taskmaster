@@ -25,6 +25,8 @@ class ToDo(db.Model):
 
 # use the decorator @ to assign the routing
 
+# Add Task
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -43,6 +45,8 @@ def index():
         tasks = ToDo.query.order_by(ToDo.date_created).all()
         return render_template('index.html', tasks=tasks)
 
+# Delete Task
+
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -55,10 +59,13 @@ def delete(id):
     except:
         return "There was a problem deleting that task"
 
+#  Update Task
+
 
 @app.route('/update/<int:id>', methods=['POST', 'GET'])
 def update(id):
     task = ToDo.query.get_or_404(id)
+    
     if request.method == 'POST':
         task.content = request.form['content']
 
@@ -71,6 +78,6 @@ def update(id):
         return render_template('update.html', task=task)
 
 
-#
+# Guard script
 if __name__ == "__main__":
     app.run(debug=True)
